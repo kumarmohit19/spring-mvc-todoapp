@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.mohit.constants.Titles;
+
 @Controller
 //@SessionAttributes("email")
 public class WelcomeController {
@@ -17,6 +19,7 @@ public class WelcomeController {
 	
 	@RequestMapping(value = "/", method= RequestMethod.GET)
 	public String showLoginPage(ModelMap model){
+		model.put("title", Titles.Welcome);
 		model.put("name", "user@google.com");
 		return "welcome";
 		

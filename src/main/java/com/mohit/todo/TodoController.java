@@ -25,10 +25,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.mohit.constants.Titles;
 import com.mohit.exception.ExceptionController;
 
 @Controller
-@SessionAttributes("email")
+@SessionAttributes("user")
 public class TodoController {
 	
 	@Autowired
@@ -44,6 +45,7 @@ public class TodoController {
 	
 	@RequestMapping(value = "/list-todos", method= RequestMethod.GET)
 	public String showLoginPage(ModelMap model){
+		model.put("title", Titles.Todos_List.toString().replace("_", " "));
 		model.put("todos", todoService.retrieveTodos(retriveLoggedinUserName()));
 		return "list-todos";
 		
@@ -62,9 +64,9 @@ public class TodoController {
 	
 	@RequestMapping(value = "/add-todo", method= RequestMethod.GET)
 	public String showTodoPage(Model model){
-		throw new RuntimeException("Dummy Exception");
-		/*model.addAttribute("todo", new Todo());
-		return "todo";*/	
+		model.addAttribute("title", Titles.Add_Todo.toString().replace("_", " "));
+		model.addAttribute("todo", new Todo());
+		return "todo";	
 	}
 	
 	@RequestMapping(value = "/add-todo", method= RequestMethod.POST)
@@ -81,6 +83,7 @@ public class TodoController {
 	public String updateTodo(Model model, @RequestParam int id){
 		Todo todo= todoService.retrieveTodo(id);
 		model.addAttribute("todo", todo);
+		model.addAttribute("title", Titles.Update_Todo.toString().replace("_", " "));
 		return "todo";	
 	}
 	
@@ -104,7 +107,8 @@ public class TodoController {
 	}
 	
 	@ExceptionHandler(value= Exception.class)
-	public String handleException(HttpServletRequest req, Exception ex){
+	public String handleException(HttpServletRequest req, Exception ex, Model model){
+		model.addAttribute("title", Titles.Error.toString().replace("_", " "));
 		logger.error("Request " + req.getRequestURI() + " Threw an Exception", ex);
 		return "error-specific";
 	}
